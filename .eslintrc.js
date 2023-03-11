@@ -4,13 +4,15 @@ module.exports = {
     node: true
   },
   extends: 'standard',
-  overrides: [
-  ],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
   rules: {
-    semi: ['error', 'always']
+    semi: ['error', 'always'],
+    'comma-dangle': ['error', 'never'],
+    eqeqeq: ['error', 'smart'],
+    'space-before-function-paren': ['error', 'never']
   }
 };

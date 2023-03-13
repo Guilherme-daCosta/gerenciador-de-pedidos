@@ -16,6 +16,6 @@ const Restaurant = connection.define('restaurant', {
   }
 });
 
-Restaurant.sync({ force: true });
+Restaurant.sync({ force: false });
 
 module.exports = Restaurant;

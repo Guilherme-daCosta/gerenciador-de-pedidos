@@ -32,6 +32,6 @@ const Users = connection.define('users', {
 Restaurant.hasMany(Users);
 Users.belongsTo(Restaurant);
 
-Users.sync({ force: false });
+Users.sync({ force: true });
 
 module.exports = Users;

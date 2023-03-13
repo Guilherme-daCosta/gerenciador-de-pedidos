@@ -9,9 +9,13 @@ const Restaurant = connection.define('restaurant', {
   cnpj: {
     type: Sequelize.TEXT,
     allowNull: false
+  },
+  email: {
+    type: Sequelize.TEXT,
+    allowNull: false
   }
 });
 
-Restaurant.sync({ force: false });
+Restaurant.sync({ force: true });
 
 module.exports = Restaurant;

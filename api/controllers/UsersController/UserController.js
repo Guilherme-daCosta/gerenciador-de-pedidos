@@ -18,7 +18,7 @@ router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
 });
 
 router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
-  const { name, lastName, dateBirth, permissions, password, repeatpassword } = req.body;
+  const { name, lastName, dateBirth, permissions, password, repeatPassword } = req.body;
   const { restaurantId } = req.params;
 
   if (!name) {
@@ -41,7 +41,7 @@ router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
     return res.status(422).json({ message: 'A senha é obrigatória!' });
   }
 
-  if (password !== repeatpassword) {
+  if (password !== repeatPassword) {
     return res.status(422).json({ message: 'As senhas não conferem!' });
   }
 

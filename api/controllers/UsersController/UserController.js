@@ -3,8 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Users = require('../../models/user/Users');
+const jwt = require('jsonwebtoken');
 
-router.get('/:restaurantid/admin/users', (req, res) => {
+router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
   const restaurantId = req.params.restaurantid;
 
   Users.findAll({ where: { restaurantId } })
@@ -16,7 +17,7 @@ router.get('/:restaurantid/admin/users', (req, res) => {
     });
 });
 
-router.post('/:restaurantid/admin/users/save', async(req, res) => {
+router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
   const { name, lastName, dateBirth, permissions, password, repeatpassword } = req.body;
   const { restaurantId } = req.params;
 
@@ -67,7 +68,7 @@ router.post('/:restaurantid/admin/users/save', async(req, res) => {
   }
 });
 
-router.patch('/:restaurantId/admin/user/:userId', async(req, res) => {
+router.patch('/:restaurantId/admin/user/:userId', CheckToken, async(req, res) => {
   const { name, lastName, dateBirth, permissions } = req.body;
   const { restaurantId, userId } = req.params;
   const userName = GetUserName(name, dateBirth);
@@ -92,7 +93,7 @@ router.patch('/:restaurantId/admin/user/:userId', async(req, res) => {
   }
 });
 
-router.patch('/:restaurantId/admin/user/:userId/pass', async(req, res) => {
+router.patch('/:restaurantId/admin/user/:userId/pass', CheckToken, async(req, res) => {
   const { password, repeatpassword } = req.body;
   const { restaurantId, userId } = req.params;
 
@@ -121,7 +122,7 @@ router.patch('/:restaurantId/admin/user/:userId/pass', async(req, res) => {
   }
 });
 
-router.delete('/:restaurantId/admin/user/:userId', async(req, res) => {
+router.delete('/:restaurantId/admin/user/:userId', CheckToken, async(req, res) => {
   const { userId } = req.params;
   const userExists = await Users.findOne({ where: { id: userId } });
 
@@ -161,7 +162,14 @@ router.post('/auth/user', async(req, res) => {
   }
 
   try {
-    console.log('');
+    const secret = process.env.SECRET;
+    const token = jwt.sign({
+      id: user.id
+    },
+    secret
+    );
+
+    res.status(200).json({ message: 'Autenticação realizada com sucesso!', token });
   } catch (err) {
     return res.status(500).json({ message: 'Aconteceu um erro no servidor, tente novamente mais tarde!' });
   }
@@ -169,6 +177,24 @@ router.post('/auth/user', async(req, res) => {
 
 function GetUserName(name, dateBirth) {
   return name.toLowerCase().substring(0, 2) + dateBirth.substring(7, 10);
+}
+
+function CheckToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Acesso negado!' });
+  }
+
+  try {
+    const secret = process.env.SECRET;
+
+    jwt.verify(token, secret);
+    next();
+  } catch (err) {
+    res.status(400).json({ message: 'Token inválido!' });
+  }
 }
 
 const bcrypt = require('bcryptjs');

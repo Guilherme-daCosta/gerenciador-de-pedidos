@@ -11,7 +11,7 @@ router.post('/restaurant/save', (req, res) => {
       cnpj
     })
       .then(() => {
-        res.status(200).redirect('/admin/restaurant/new');
+        res.status(200).json({ message: 'Restaurante cadastrado com sucesso' });
       })
       .catch((err) => {
         res.status(400).json(err);

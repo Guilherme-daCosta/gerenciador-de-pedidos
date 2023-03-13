@@ -1,4 +1,5 @@
 /* eslint-disable eqeqeq */
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Users = require('../../models/user/Users');
@@ -15,107 +16,155 @@ router.get('/:restaurantid/admin/users', (req, res) => {
     });
 });
 
-router.post('/:restaurantid/admin/users/save', (req, res) => {
+router.post('/:restaurantid/admin/users/save', async(req, res) => {
   const { name, lastName, dateBirth, permissions, password, repeatpassword } = req.body;
   const { restaurantId } = req.params;
-  const userName = GetUserName(name, dateBirth);
 
-  if (password === repeatpassword) {
-    Users.findOne({ where: { userName } }).then((user) => {
-      if (user == undefined) {
-        Users.create({
-          name,
-          lastName,
-          dateBirth,
-          permissions,
-          userName,
-          password: HashPassword(password),
-          restaurantId
-        }).then(() => {
-          res.status(200).json({ message: 'Cadastro realizado com sucesso!' });
-        }).catch((err) => {
-          res.status(400).send(err);
-        });
-      } else {
-        res.status(401).json({ message: 'Usuário ja cadastrado!' });
-      }
+  if (!name) {
+    return res.status(422).json({ message: 'O nome é obrigatório!' });
+  }
+
+  if (!lastName) {
+    return res.status(422).json({ message: 'O sobrenome é obrigatório!' });
+  }
+
+  if (!dateBirth) {
+    return res.status(422).json({ message: 'A data de nascimento é obrigatória!' });
+  }
+
+  if (!permissions) {
+    return res.status(422).json({ message: 'O tipo de usuário deve ser informado!' });
+  }
+
+  if (!password) {
+    return res.status(422).json({ message: 'A senha é obrigatória!' });
+  }
+
+  if (password !== repeatpassword) {
+    return res.status(422).json({ message: 'As senhas não conferem!' });
+  }
+
+  const userName = GetUserName(name, dateBirth);
+  const userExists = await Users.findOne({ where: { userName } });
+
+  if (userExists) {
+    res.status(401).json({ message: 'Usuário ja cadastrado!' });
+  }
+
+  try {
+    Users.create({
+      name,
+      lastName,
+      dateBirth,
+      permissions,
+      userName,
+      password: HashPassword(password),
+      restaurantId
     });
-  } else {
-    res.status(403).json({ message: 'As senhas não conferem!' });
+    res.status(200).json({ message: 'Cadastro realizado com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
   }
 });
 
-router.patch('/:restaurantId/admin/user/:userid', (req, res) => {
+router.patch('/:restaurantId/admin/user/:userId', async(req, res) => {
   const { name, lastName, dateBirth, permissions } = req.body;
-  const { restaurantId, userid } = req.params;
+  const { restaurantId, userId } = req.params;
   const userName = GetUserName(name, dateBirth);
+  const userExists = await Users.findOne({ where: { id: userId } });
 
-  Users.findOne({ where: { id: userid } }).then((user) => {
-    if (user != undefined) {
-      Users.update(
-        {
-          name,
-          lastName,
-          dateBirth,
-          permissions,
-          userName,
-          restaurantId
-        },
-        { where: { id: userid } }
-      ).then(() => {
-        res.status(200).json({ message: 'Cadastro atualizado com sucesso!' });
-      }).catch((err) => {
-        res.status(400).send(err);
-      });
-    } else {
-      res.status(401).json({ message: 'Usuário não encontrado' });
-    }
-  });
-});
+  if (!userExists) {
+    res.status(401).json({ message: 'O usuário não existe' });
+  }
 
-router.patch('/:restaurantId/admin/user/:userid/pass', (req, res) => {
-  const { password, repeatpassword } = req.body;
-  const { restaurantId, userid } = req.params;
-
-  if (password === repeatpassword) {
-    Users.findOne({ where: { id: userid } }).then((user) => {
-      if (user != undefined) {
-        Users.update(
-          {
-            password: HashPassword(password),
-            restaurantId
-          },
-          { where: { id: userid } }
-        ).then(() => {
-          res.status(200).json({ message: 'Senha atualizada com sucesso!' });
-        }).catch((err) => {
-          res.status(400).send(err);
-        });
-      } else {
-        res.status(401).json({ message: 'Usuário não encontrado' });
-      }
-    });
-  } else {
-    res.status(403).json({ message: 'As senhas não conferem!' });
+  try {
+    Users.update({
+      name,
+      lastName,
+      dateBirth,
+      permissions,
+      userName,
+      restaurantId
+    }, { where: { id: userId } });
+    res.status(200).json({ message: 'Cadastro atualizado com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
   }
 });
 
-router.delete('/:restaurantid/admin/user/:userid', (req, res) => {
-  const { userid } = req.params;
+router.patch('/:restaurantId/admin/user/:userId/pass', async(req, res) => {
+  const { password, repeatpassword } = req.body;
+  const { restaurantId, userId } = req.params;
 
-  Users.findOne({ where: { id: userid } }).then((user) => {
-    if (user != undefined) {
-      Users.destroy({ where: { id: userid } })
-        .then(() => {
-          res.status(200).json({ message: 'Usuário deletado com sucesso!' });
-        })
-        .catch((err) => {
-          res.status(400).send(err);
-        });
-    } else {
-      res.status(401).json({ message: 'Usuário não encontrado' });
-    }
-  });
+  if (!password) {
+    return res.status(422).json({ message: 'A senha é obrigatória!' });
+  }
+
+  if (password !== repeatpassword) {
+    return res.status(422).json({ message: 'As senhas não conferem!' });
+  }
+
+  const userExists = await Users.findOne({ where: { id: userId } });
+
+  if (!userExists) {
+    return res.status(422).json({ message: 'O usuário não existe' });
+  }
+
+  try {
+    Users.update({
+      password: HashPassword(password),
+      restaurantId
+    }, { where: { id: userId } });
+    res.status(200).json({ message: 'Senha atualizada com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
+  }
+});
+
+router.delete('/:restaurantId/admin/user/:userId', async(req, res) => {
+  const { userId } = req.params;
+  const userExists = await Users.findOne({ where: { id: userId } });
+
+  if (!userExists) {
+    return res.status(422).json({ message: 'O usuário não existe' });
+  }
+
+  try {
+    Users.destroy({ where: { id: userId } });
+    res.status(200).json({ message: 'Usuário deletado com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
+  }
+});
+
+router.post('/auth/user', async(req, res) => {
+  const { userName, password } = req.body;
+
+  if (!userName) {
+    return res.status(422).json({ message: 'Email é obrigatório!' });
+  }
+
+  if (!password) {
+    return res.status(422).json({ message: 'A senha é obrigatória!' });
+  }
+
+  const user = await Users.findOne({ where: { userName } });
+
+  if (!user) {
+    return res.status(404).json({ message: 'O usuário não encontrado' });
+  }
+
+  const checkPassword = await bcrypt.compare(password, user.password);
+
+  if (!checkPassword) {
+    return res.status(422).json({ message: 'Senha inválida!' });
+  }
+
+  try {
+    console.log('');
+  } catch (err) {
+    return res.status(500).json({ message: 'Aconteceu um erro no servidor, tente novamente mais tarde!' });
+  }
 });
 
 function GetUserName(name, dateBirth) {

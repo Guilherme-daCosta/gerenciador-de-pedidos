@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const connection = require('../database');
 const Restaurant = require('../restaurant/Restaurant');
 
-const Snack = connection.define('categories', {
+const Snack = connection.define('snacks', {
   type: {
     type: Sequelize.STRING,
     allowNull: false
@@ -32,6 +32,6 @@ const Snack = connection.define('categories', {
 Restaurant.hasMany(Snack);
 Snack.belongsTo(Restaurant);
 
-Snack.sync({ force: true });
+Snack.sync({ force: false });
 
 module.exports = Snack;

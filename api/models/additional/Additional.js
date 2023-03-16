@@ -17,9 +17,9 @@ const Additional = connection.define('categories', {
   }
 });
 
-Restaurant.belongsTo(Additional);
+Restaurant.hasMany(Additional);
 Additional.belongsTo(Restaurant);
 
-Additional.sync({ force: false });
+Additional.sync({ force: true });
 
 module.exports = Additional;

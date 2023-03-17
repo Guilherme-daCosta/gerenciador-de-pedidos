@@ -8,7 +8,7 @@ const Additional = connection.define('additionals', {
     allowNull: false
   },
   price: {
-    type: Sequelize.DECIMAL,
+    type: Sequelize.FLOAT,
     allowNull: false
   },
   categorie: {
@@ -20,6 +20,6 @@ const Additional = connection.define('additionals', {
 Restaurant.hasMany(Additional);
 Additional.belongsTo(Restaurant);
 
-Additional.sync({ force: false });
+Additional.sync({ force: true });
 
 module.exports = Additional;

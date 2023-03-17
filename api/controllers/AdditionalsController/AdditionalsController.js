@@ -3,8 +3,16 @@ const router = express.Router();
 const Additional = require('../../models/additional/Additional');
 const jwt = require('jsonwebtoken');
 
-router.get('/additional', CheckToken, (req, res) => {
-  Additional.findall();
+router.get('/:restaurantId/additionals', CheckToken, (req, res) => {
+  const { restaurantId } = req.params;
+
+  Additional.findall({ where: { restaurantId } })
+    .then((additionals) => {
+      res.status(200).json({ additionals });
+    })
+    .catch((err) => {
+      res.send(400).json({ message: err });
+    });
 });
 
 router.post('/:restaurantId/additional/save', CheckToken, async(req, res) => {

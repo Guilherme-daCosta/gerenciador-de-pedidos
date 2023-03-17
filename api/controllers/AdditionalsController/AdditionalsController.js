@@ -5,7 +5,40 @@ const jwt = require('jsonwebtoken');
 
 router.get('/additional', CheckToken, (req, res) => {
   Additional.findall();
-  console.log('teste tabela');
+});
+
+router.post('/:restaurantId/additional/save', CheckToken, async(req, res) => {
+  const { item, price, categorie } = req.body;
+  const { restaurantId } = req.params;
+
+  if (!item) {
+    return res.status(422).json({ message: 'O item é obrigatório!' });
+  }
+
+  if (!price) {
+    return res.status(422).json({ message: 'O preço é obrigatório!' });
+  }
+
+  if (!categorie) {
+    return res.status(422).json({ message: 'A categoria é obrigatória!' });
+  }
+
+  const itemExists = await Additional.findOne({ where: { item } });
+  if (itemExists) {
+    return res.status(401).json({ message: 'O item ja esta cadastrado!' });
+  }
+
+  try {
+    Additional.create({
+      item,
+      price,
+      categorie,
+      restaurantId
+    });
+    res.status(200).json({ message: 'Item adicionado com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
+  }
 });
 
 function CheckToken(req, res, next) {

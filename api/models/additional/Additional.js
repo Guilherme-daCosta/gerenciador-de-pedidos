@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const connection = require('../database');
 const Restaurant = require('../restaurant/Restaurant');
 
-const Additional = connection.define('categories', {
+const Additional = connection.define('additionals', {
   item: {
     type: Sequelize.STRING,
     allowNull: false

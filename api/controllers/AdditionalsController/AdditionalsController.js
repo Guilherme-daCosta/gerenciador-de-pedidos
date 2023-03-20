@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Additional = require('../../models/additional/Additional');
+const Additional = require('../../models/Additional');
 const jwt = require('jsonwebtoken');
 
 router.get('/:restaurantId/additionals', CheckToken, (req, res) => {
@@ -59,17 +59,21 @@ router.patch('/:restaurantId/additional/:id/update', CheckToken, async(req, res)
   }
 
   try {
-    Additional.update({
-      item,
-      price,
-      categorie,
-      restaurantId
-    }, { where: { id } });
+    Additional.update(
+      {
+        item,
+        price,
+        categorie,
+        restaurantId
+      },
+      { where: { id } }
+    );
     res.status(200).json({ message: 'Item alterado com sucesso!' });
   } catch (err) {
     res.send(400).json({ message: err });
   }
-});
+}
+);
 
 router.delete('/:restaurantId/additional/:id/delete', CheckToken, async(req, res) => {
   const { id } = req.params;
@@ -85,7 +89,8 @@ router.delete('/:restaurantId/additional/:id/delete', CheckToken, async(req, res
   } catch (err) {
     res.send(400).json({ message: err });
   }
-});
+}
+);
 
 function CheckToken(req, res, next) {
   const authHeader = req.headers.authorization;

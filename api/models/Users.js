@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const connection = require('./database');
-const Restaurant = require('./restaurant/Restaurant');
+const Restaurant = require('./Restaurant');
 
 const Users = connection.define('users', {
   name: {

@@ -61,3 +61,5 @@ router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
     res.send(400).json({ message: err });
   }
 });
+
+module.exports = router;

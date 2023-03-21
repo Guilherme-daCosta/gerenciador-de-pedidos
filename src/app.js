@@ -4,7 +4,12 @@ const connection = require('../api/models/database');
 const app = express();
 
 const RestaurantController = require('../api/controllers/RestaurantController/RestaurantController');
-const UserController = require('../api/controllers/UsersController/UserController');
+const AuthUser = require('./controllers/Users/Auth');
+const CreateUser = require('./controllers/Users/Create');
+const GetUser = require('./controllers/Users/Get');
+const UpdateUser = require('./controllers/Users/Update');
+const UpdatePasswordUser = require('./controllers/Users/UpdatePassword');
+const DeleteUser = require('./controllers/Users/Delete');
 const AdditionalsController = require('../api/controllers/AdditionalsController/AdditionalsController');
 const SnacksController = require('../api/controllers/SnacksController/SnacksController');
 
@@ -20,7 +25,12 @@ connection
   });
 
 app.use('/', RestaurantController);
-app.use('/', UserController);
+app.use('/', AuthUser);
+app.use('/', CreateUser);
+app.use('/', GetUser);
+app.use('/', UpdateUser);
+app.use('/', UpdatePasswordUser);
+app.use('/', DeleteUser);
 app.use('/', AdditionalsController);
 app.use('/', SnacksController);
 

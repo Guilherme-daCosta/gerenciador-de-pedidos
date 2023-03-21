@@ -6,18 +6,6 @@ const HashPassword = require('../../Util/HashBcrypt');
 const GetUserName = require('../../Util/CreateUserName');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.delete('/:restaurantId/delete', CheckToken, async(req, res) => {
-  const { restaurantId } = req.params;
-
-  Restaurant.destroy({ where: { id: restaurantId } })
-    .then(() => {
-      res.status(200).json({ message: 'Usuário deletado com sucesso!' });
-    })
-    .catch((err) => {
-      res.status(400).json({ message: err });
-    });
-});
-
 router.patch('/:restaurantId/update', CheckToken, async(req, res) => {
   const { name, cnpj, email } = req.body;
   const { restaurantId } = req.params;

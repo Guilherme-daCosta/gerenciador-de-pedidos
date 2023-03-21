@@ -9,18 +9,6 @@ const bcrypt = require('bcryptjs');
 const HashPassword = require('../../Util/HashBcrypt');
 const GetUserName = require('../../Util/CreateUserName');
 
-router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
-  const restaurantId = req.params.restaurantid;
-
-  Users.findAll({ where: { restaurantId } })
-    .then(users => {
-      res.status(200).json(users);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
-});
-
 router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
   const { name, lastName, dateBirth, permissions, password, repeatPassword } = req.body;
   const { restaurantId } = req.params;

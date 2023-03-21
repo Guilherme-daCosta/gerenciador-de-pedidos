@@ -17,7 +17,7 @@ router.delete('/:restaurantId/admin/user/:userId', CheckToken, async(req, res) =
     Users.destroy({ where: { id: userId } });
     res.status(200).json({ message: 'Usuário deletado com sucesso!' });
   } catch (err) {
-    res.send(400).json({ message: err });
+    res.status(400).json({ message: err });
   }
 });
 

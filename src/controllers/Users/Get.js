@@ -13,7 +13,7 @@ router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
       res.status(200).json(users);
     })
     .catch((err) => {
-      res.status(400).send(err);
+      res.status(400).json({ message: err });
     });
 });
 

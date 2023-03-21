@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Additional = require('../../models/Additional');
-const jwt = require('jsonwebtoken');
+const CheckToken = require('../../Util/AuthJWT');
 
 router.get('/:restaurantId/additionals', CheckToken, (req, res) => {
   const { restaurantId } = req.params;
@@ -13,40 +13,6 @@ router.get('/:restaurantId/additionals', CheckToken, (req, res) => {
     .catch((err) => {
       res.send(400).json({ message: err });
     });
-});
-
-router.post('/:restaurantId/additional/save', CheckToken, async(req, res) => {
-  const { item, price, categorie } = req.body;
-  const { restaurantId } = req.params;
-
-  if (!item) {
-    return res.status(422).json({ message: 'O item é obrigatório!' });
-  }
-
-  if (!price) {
-    return res.status(422).json({ message: 'O preço é obrigatório!' });
-  }
-
-  if (!categorie) {
-    return res.status(422).json({ message: 'A categoria é obrigatória!' });
-  }
-
-  const itemExists = await Additional.findOne({ where: { item } });
-  if (itemExists) {
-    return res.status(401).json({ message: 'O item ja esta cadastrado!' });
-  }
-
-  try {
-    Additional.create({
-      item,
-      price,
-      categorie,
-      restaurantId
-    });
-    res.status(200).json({ message: 'Item adicionado com sucesso!' });
-  } catch (err) {
-    res.send(400).json({ message: err });
-  }
 });
 
 router.patch('/:restaurantId/additional/:id/update', CheckToken, async(req, res) => {
@@ -91,23 +57,5 @@ router.delete('/:restaurantId/additional/:id/delete', CheckToken, async(req, res
   }
 }
 );
-
-function CheckToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Acesso negado!' });
-  }
-
-  try {
-    const secret = process.env.SECRET;
-
-    jwt.verify(token, secret);
-    next();
-  } catch (err) {
-    res.status(400).json({ message: 'Token inválido!' });
-  }
-}
 
 module.exports = router;

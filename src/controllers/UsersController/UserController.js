@@ -3,7 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Users = require('../../../src/models/user/Users');
+const CheckToken = require('../../Util/AuthJWT');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const HashPassword = require('../../Util/HashBcrypt');
 
 router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
   const restaurantId = req.params.restaurantid;
@@ -177,31 +180,6 @@ router.post('/auth/user', async(req, res) => {
 
 function GetUserName(name, dateBirth) {
   return name.toLowerCase().substring(0, 2) + dateBirth.substring(7, 10);
-}
-
-function CheckToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ message: 'Acesso negado!' });
-  }
-
-  try {
-    const secret = process.env.SECRET;
-
-    jwt.verify(token, secret);
-    next();
-  } catch (err) {
-    res.status(400).json({ message: 'Token inválido!' });
-  }
-}
-
-const bcrypt = require('bcryptjs');
-function HashPassword(password) {
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
-  return hash;
 }
 
 module.exports = router;

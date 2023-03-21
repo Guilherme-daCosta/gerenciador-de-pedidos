@@ -7,6 +7,7 @@ const CheckToken = require('../../Util/AuthJWT');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const HashPassword = require('../../Util/HashBcrypt');
+const GetUserName = require('../../Util/CreateUserName');
 
 router.get('/:restaurantid/admin/users', CheckToken, (req, res) => {
   const restaurantId = req.params.restaurantid;
@@ -177,9 +178,5 @@ router.post('/auth/user', async(req, res) => {
     return res.status(500).json({ message: 'Aconteceu um erro no servidor, tente novamente mais tarde!' });
   }
 });
-
-function GetUserName(name, dateBirth) {
-  return name.toLowerCase().substring(0, 2) + dateBirth.substring(7, 10);
-}
 
 module.exports = router;

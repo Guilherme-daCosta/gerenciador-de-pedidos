@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Restaurant = require('../../models/restaurant/Restaurant');
 const Users = require('../../models/user/Users');
+const HashPassword = require('../../Util/HashBcrypt');
+const GetUserName = require('../../Util/CreateUserName');
 
 router.post('/restaurant/save', async(req, res) => {
   const { name, cnpj, email, password, repeatPassword } = req.body;
@@ -60,16 +62,5 @@ router.post('/restaurant/save', async(req, res) => {
     res.status(400).json({ message: err });
   }
 });
-
-function GetUserName(name, cnpj) {
-  return name.toString().substring(0, 2).toLowerCase() + cnpj.toString().replace('.', '').substring(0, 4);
-}
-
-const bcrypt = require('bcryptjs');
-function HashPassword(password) {
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
-  return hash;
-}
 
 module.exports = router;

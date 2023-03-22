@@ -3,7 +3,7 @@ const router = express.Router();
 const Snack = require('../../models/Snacks');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.get('/:restaurantId/snacks', CheckToken, async(req, res) => {
+router.post('/:restaurantId/snacks', CheckToken, async(req, res) => {
   const { restaurantId } = req.params;
   const { type, size, flavor, description, price, categorie } = req.body;
 
@@ -34,6 +34,21 @@ router.get('/:restaurantId/snacks', CheckToken, async(req, res) => {
   const snackExists = await Snack.findOne({ where: { restaurantId } });
   if (snackExists) {
     return res.status(401).json({ message: 'O item ja esta cadastrado!' });
+  }
+
+  try {
+    Snack.create({
+      type,
+      size,
+      flavor,
+      description,
+      price,
+      categorie,
+      restaurantId
+    });
+    res.status(200).json({ message: 'Item adicionado com sucesso!' });
+  } catch (err) {
+    res.send(400).json({ message: err });
   }
 });
 

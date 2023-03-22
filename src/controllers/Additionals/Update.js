@@ -12,21 +12,21 @@ router.patch('/:restaurantId/additional/:id/update', CheckToken, async(req, res)
     return res.status(401).json({ message: 'O item não esta cadastrado!' });
   }
 
-  try {
-    Additional.update(
-      {
-        item,
-        price,
-        categorie,
-        restaurantId
-      },
-      { where: { id } }
-    );
-    res.status(200).json({ message: 'Item alterado com sucesso!' });
-  } catch (err) {
-    res.send(400).json({ message: err });
-  }
-}
-);
+  Additional.update(
+    {
+      item,
+      price,
+      categorie,
+      restaurantId
+    },
+    { where: { id } }
+  )
+    .then(() => {
+      res.status(200).json({ message: 'Item alterado com sucesso!' });
+    })
+    .catch((err) => {
+      res.send(400).json({ message: err });
+    });
+});
 
 module.exports = router;

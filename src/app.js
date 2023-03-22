@@ -20,7 +20,10 @@ const Createadditionals = require('./controllers/Additionals/Create');
 const UpdateAdditionals = require('./controllers/Additionals/Update');
 const DeleteAdditionals = require('./controllers/Additionals/Delete');
 
-const SnacksController = require('../api/controllers/SnacksController/SnacksController');
+const GetSnacks = require('./controllers/Snacks/Get');
+const CreateSnacks = require('./controllers/Snacks/Create');
+const UpdateSnacks = require('./controllers/Snacks/Update');
+const DeleteSnacks = require('./controllers/Snacks/Delete');
 
 app.use(express.json());
 
@@ -50,7 +53,10 @@ app.use('/', Createadditionals);
 app.use('/', UpdateAdditionals);
 app.use('/', DeleteAdditionals);
 
-app.use('/', SnacksController);
+app.use('/', GetSnacks);
+app.use('/', CreateSnacks);
+app.use('/', UpdateSnacks);
+app.use('/', DeleteSnacks);
 
 app.get('/', (req, res) => {
   res.status(200).send('Rota teste');

@@ -19,8 +19,8 @@ router.post('/:restaurantId/additional/save', CheckToken, async(req, res) => {
     return res.status(422).json({ message: 'A categoria é obrigatória!' });
   }
 
-  const itemExists = await Additional.findOne({ where: { item } });
-  if (itemExists) {
+  const additionalExists = await Additional.findOne({ where: { item } });
+  if (additionalExists) {
     return res.status(401).json({ message: 'O item ja esta cadastrado!' });
   }
 

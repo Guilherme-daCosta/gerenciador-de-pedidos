@@ -20,6 +20,6 @@ const Additional = connection.define('additionals', {
 Restaurant.hasMany(Additional);
 Additional.belongsTo(Restaurant);
 
-Additional.sync({ force: true });
+Additional.sync({ force: false });
 
 module.exports = Additional;

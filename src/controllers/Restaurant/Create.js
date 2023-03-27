@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Restaurant = require('../../models/restaurant/Restaurant');
-const Users = require('../../models/user/Users');
+const Restaurant = require('../../models/Restaurant');
+const Users = require('../../models/Users');
 const HashPassword = require('../../Util/HashBcrypt');
 const GetUserName = require('../../Util/CreateUserName');
 

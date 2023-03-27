@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Restaurant = require('../../models/restaurant/Restaurant');
+const Restaurant = require('../../models/Restaurant');
 const CheckToken = require('../../Util/AuthJWT');
 
 router.get('/:restaurantId', CheckToken, (req, res) => {

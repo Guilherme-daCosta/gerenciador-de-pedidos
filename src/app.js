@@ -1,5 +1,5 @@
 const express = require('express');
-const connection = require('../api/models/database');
+const connection = require('../src/models/database');
 
 const app = express();
 

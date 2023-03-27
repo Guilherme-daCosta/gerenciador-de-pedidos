@@ -27,7 +27,7 @@ const Restaurant = connection.define('restaurant', {
     allowNull: false
   },
   number: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   zipCode: {

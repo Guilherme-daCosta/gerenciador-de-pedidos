@@ -6,7 +6,7 @@ const HashPassword = require('../../Util/HashBcrypt');
 const GetUserName = require('../../Util/CreateUserName');
 
 router.post('/restaurant/save', async(req, res) => {
-  const { name, cnpj, email, address, zipCode, password, repeatPassword } = req.body;
+  const { name, cnpj, email, city, state, street, number, zipCode, password, repeatPassword } = req.body;
 
   if (!name) {
     res.status(404).json({ message: 'Nome é obrigatório' });
@@ -20,7 +20,19 @@ router.post('/restaurant/save', async(req, res) => {
     res.status(404).json({ message: 'Email é obrigatório' });
   }
 
-  if (!address) {
+  if (!city) {
+    res.status(404).json({ message: 'Endereço é obrigatório' });
+  }
+
+  if (!state) {
+    res.status(404).json({ message: 'Endereço é obrigatório' });
+  }
+
+  if (!street) {
+    res.status(404).json({ message: 'Endereço é obrigatório' });
+  }
+
+  if (!number) {
     res.status(404).json({ message: 'Endereço é obrigatório' });
   }
 
@@ -48,7 +60,12 @@ router.post('/restaurant/save', async(req, res) => {
     Restaurant.create({
       name,
       cnpj,
-      email
+      email,
+      city,
+      state,
+      street,
+      number,
+      zipCode
     })
       .then(restaurant => {
         Users.create({

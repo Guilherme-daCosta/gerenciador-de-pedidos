@@ -13,6 +13,14 @@ const Restaurant = connection.define('restaurant', {
   email: {
     type: Sequelize.TEXT,
     allowNull: false
+  },
+  address: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  zipCode: {
+    type: Sequelize.TEXT,
+    allowNull: false
   }
 });
 

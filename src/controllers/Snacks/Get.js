@@ -3,7 +3,7 @@ const router = express.Router();
 const Snack = require('../../models/Snacks');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.get('/:restaurantId/snacks', CheckToken, (req, res) => {
+router.get('/:restaurantId/snacks/save', CheckToken, (req, res) => {
   const { restaurantId } = req.params;
 
   Snack.findall({ where: { restaurantId } })

@@ -3,7 +3,7 @@ const router = express.Router();
 const Snack = require('../../models/Snacks');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.delete('/:restaurantId/snacks/:id', CheckToken, (req, res) => {
+router.delete('/:restaurantId/snacks/:id/del', CheckToken, (req, res) => {
   const { id } = req.params;
 
   Snack.destroy({ where: { id } })

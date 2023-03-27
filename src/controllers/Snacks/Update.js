@@ -3,7 +3,7 @@ const router = express.Router();
 const Snack = require('../../models/Snacks');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.patch('/:restaurantId/snacks/:id', CheckToken, (req, res) => {
+router.patch('/:restaurantId/snacks/:id/update', CheckToken, (req, res) => {
   const { restaurantId, id } = req.params;
   const { type, size, flavor, description, price, categorie } = req.body;
 

@@ -14,8 +14,20 @@ const Restaurant = connection.define('restaurant', {
     type: Sequelize.TEXT,
     allowNull: false
   },
-  address: {
+  city: {
     type: Sequelize.TEXT,
+    allowNull: false
+  },
+  state: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  street: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  number: {
+    type: Sequelize.NUMBER,
     allowNull: false
   },
   zipCode: {

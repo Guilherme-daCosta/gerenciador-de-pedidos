@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../../models/Users');
 const CheckToken = require('../../Util/AuthJWT');
-const GetUserName = require('../../Util/CreateUserName');
+const GetUserName = require('../../Util/GetUserName');
 
 router.patch('/:restaurantId/admin/user/:userId', CheckToken, async(req, res) => {
   const { name, lastName, dateBirth, permissions } = req.body;

@@ -5,11 +5,10 @@ const router = express.Router();
 const Users = require('../../models/Users');
 const CheckToken = require('../../Util/AuthJWT');
 const HashPassword = require('../../Util/HashBcrypt');
-const GetUserName = require('../../Util/CreateUserName');
+const GetUserName = require('../../Util/GetUserName');
 
-router.post('/:restaurantid/admin/users/save', CheckToken, async(req, res) => {
-  const { name, lastName, dateBirth, permissions, password, repeatPassword } =
-    req.body;
+router.post('/:restaurantId/admin/users/save', CheckToken, async(req, res) => {
+  const { name, lastName, dateBirth, permissions, password, repeatPassword } = req.body;
   const { restaurantId } = req.params;
 
   if (!name) {

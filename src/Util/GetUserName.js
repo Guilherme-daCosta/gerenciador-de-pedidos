@@ -1,7 +1,7 @@
-function GetUserName(name, cnpj) {
+function GetUserName(name, dateBirth) {
   return (
     name.toString().substring(0, 2).toLowerCase() +
-    cnpj.toString().replace('.', '').substring(0, 4)
+    dateBirth.toString().replace('.', '').substring(7, 10)
   );
 }
 

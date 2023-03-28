@@ -3,10 +3,21 @@ const router = express.Router();
 const Restaurant = require('../../models/Restaurant');
 const Users = require('../../models/Users');
 const HashPassword = require('../../Util/HashBcrypt');
-const GetUserName = require('../../Util/CreateUserName');
+const GetUserRestaurant = require('../../Util/GetUserRestaurant');
 
 router.post('/restaurant/save', async(req, res) => {
-  const { name, cnpj, email, city, state, street, number, zipCode, password, repeatPassword } = req.body;
+  const {
+    name,
+    cnpj,
+    email,
+    city,
+    state,
+    street,
+    number,
+    zipCode,
+    password,
+    repeatPassword
+  } = req.body;
 
   if (!name) {
     res.status(404).json({ message: 'Nome é obrigatório' });
@@ -54,7 +65,7 @@ router.post('/restaurant/save', async(req, res) => {
     res.status(401).json({ message: 'Este CNPJ ja está cadastrado!' });
   }
 
-  const userName = await GetUserName(name.split(' ')[0], cnpj);
+  const userName = await GetUserRestaurant(name.split(' ')[0], cnpj);
 
   try {
     Restaurant.create({
@@ -66,21 +77,19 @@ router.post('/restaurant/save', async(req, res) => {
       street,
       number,
       zipCode
-    })
-      .then(restaurant => {
-        Users.create({
-          name: name.split(' ')[0],
-          lastName: name.split(' ')[1],
-          dateBirth: Date.now(),
-          permissions: 'owner',
-          userName,
-          password: HashPassword(password),
-          restaurantId: restaurant.id
-        });
+    }).then((restaurant) => {
+      Users.create({
+        name: name.split(' ')[0],
+        lastName: name.split(' ')[1],
+        dateBirth: Date.now(),
+        permissions: 'owner',
+        userName,
+        password: HashPassword(password),
+        restaurantId: restaurant.id
       });
+    });
     res.status(200).json({
-      message:
-      `Cadastro concluído com sucesso!
+      message: `Cadastro concluído com sucesso!
       Seu usuário de login corresponde as duas primeiras letras de seu nome e os quatro primeiros digitos do seu CNPJ.`
     });
   } catch (err) {

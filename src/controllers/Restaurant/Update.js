@@ -4,7 +4,7 @@ const Restaurant = require('../../models/Restaurant');
 const CheckToken = require('../../Util/AuthJWT');
 
 router.patch('/:restaurantId/update', CheckToken, async(req, res) => {
-  const { name, cnpj, email } = req.body;
+  const { name, cnpj, email, city, state, street, number, zipCode } = req.body;
   const { restaurantId } = req.params;
 
   if (!name) {
@@ -20,12 +20,19 @@ router.patch('/:restaurantId/update', CheckToken, async(req, res) => {
   }
 
   try {
-    Restaurant.update({
-      name,
-      cnpj,
-      email
-    },
-    { where: { id: restaurantId } });
+    Restaurant.update(
+      {
+        name,
+        cnpj,
+        email,
+        city,
+        state,
+        street,
+        number,
+        zipCode
+      },
+      { where: { id: restaurantId } }
+    );
     res.status(200).json({ message: 'Cadastro atualizado com sucesso!' });
   } catch (err) {
     res.status(400).json({ message: err });

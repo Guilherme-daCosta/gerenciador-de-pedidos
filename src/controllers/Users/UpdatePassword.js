@@ -7,14 +7,14 @@ const CheckToken = require('../../Util/AuthJWT');
 const HashPassword = require('../../Util/HashBcrypt');
 
 router.patch('/:restaurantId/admin/user/:userId/pass', CheckToken, async(req, res) => {
-  const { password, repeatpassword } = req.body;
+  const { password, repeatPassword } = req.body;
   const { restaurantId, userId } = req.params;
 
   if (!password) {
     return res.status(422).json({ message: 'A senha é obrigatória!' });
   }
 
-  if (password !== repeatpassword) {
+  if (password !== repeatPassword) {
     return res.status(422).json({ message: 'As senhas não conferem!' });
   }
 

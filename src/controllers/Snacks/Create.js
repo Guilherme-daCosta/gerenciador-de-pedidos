@@ -3,7 +3,7 @@ const router = express.Router();
 const Snack = require('../../models/Snacks');
 const CheckToken = require('../../Util/AuthJWT');
 
-router.post('/:restaurantId/snacks', CheckToken, async(req, res) => {
+router.post('/:restaurantId/snacks/save', CheckToken, async(req, res) => {
   const { restaurantId } = req.params;
   const { type, size, flavor, description, price, categorie } = req.body;
 

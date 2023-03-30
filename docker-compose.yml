@@ -7,9 +7,9 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     expose:
-      - '3306'
+      - '80'
     ports:
-      - '3306:3306'
+      - '80:80'
     environment:
       MYSQL_DATABASE: 'order_manager'
       MYSQL_ROOT_PASSWORD: root

@@ -1,4 +1,4 @@
-version: '2'
+version: '20'
 
 services:
   db:
@@ -7,14 +7,14 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     expose:
-      - '80'
+      - '3306'
     ports:
-      - '80:80'
+      - '3308:3306'
     environment:
       MYSQL_DATABASE: 'order_manager'
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
-      
+      MYSQL_ALLOW_EMPTY_PASSWORD: false
+
   app:
     build: .
     command: npm start

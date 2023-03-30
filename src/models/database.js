@@ -8,7 +8,7 @@ const connection = new Sequelize('order_manager', user, password, {
   host,
   dialect: 'mysql',
   timezone: '-03:00',
-  port: 80
+  port: 3306
 });
 
 module.exports = connection;

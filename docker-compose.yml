@@ -13,7 +13,7 @@ services:
     environment:
       MYSQL_DATABASE: 'order_manager'
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_ALLOW_EMPTY_PASSWORD: false
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'false'
       
   app:
     build: .

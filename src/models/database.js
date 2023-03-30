@@ -7,7 +7,8 @@ const password = process.env.DB_PASS;
 const connection = new Sequelize('order_manager', user, password, {
   host,
   dialect: 'mysql',
-  timezone: '-03:00'
+  timezone: '-03:00',
+  port: 3306
 });
 
 module.exports = connection;

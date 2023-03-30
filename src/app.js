@@ -1,9 +1,6 @@
 const express = require('express');
 const connection = require('../src/models/database');
 
-const PORT = 3333;
-const HOST = '0.0.0.0';
-
 const app = express();
 
 const CreateRestaurant = require('./controllers/Restaurant/Create');
@@ -65,4 +62,6 @@ app.get('/', (req, res) => {
   res.status(200).send('Rota teste');
 });
 
-app.listen(PORT, HOST);
+app.listen(3000, () => {
+  console.log('App rodando na porta: 3000');
+});
